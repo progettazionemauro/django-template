@@ -213,3 +213,180 @@ If Ctrl+C is pressed outside the listener context or the program is terminated w
 
 That's the breakdown of the code. It sets up a GUI window and captures the Ctrl+C keyboard combination to copy the selected text and append it to a file. The success or error message is displayed in the GUI.
 ____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+To run the code cppy_and_paste_in_text_document.py when you press Ctrl+C, you can modify the existing code as follows:
+
+Import the subprocess module at the beginning of your main code.
+
+Inside the copy_selected_text() function in your main code, add the following line to run cppy_and_paste_in_text_document.py using subprocess.run():
+
+python
+Copy code
+subprocess.run(['python3', '/home/mauro/Scrivania/django_general_template2/sgq/utilities/cppy_and_paste_in_text_document.py'])
+Remove the import statements for subprocess and tkinter modules from cppy_and_paste_in_text_document.py since those modules are already imported in your main code.
+
+Update the copy_selected_text() function in cppy_and_paste_in_text_document.py to remove the subprocess calls for copying the selected text and appending it to the file since this will be handled by the main code.
+
+Here's the modified code:
+
+python
+Copy code
+import subprocess
+import tkinter as tk
+from pynput import keyboard
+
+file_path = '/home/mauro/Scrivania/django_general_template2/sgq/utilities/storage/selected_text.txt'
+ctrl_pressed = False
+
+def copy_selected_text():
+    try:
+        # Run the cppy_and_paste_in_text_document.py script
+        subprocess.run(['python3', '/home/mauro/Scrivania/django_general_template2/sgq/utilities/cppy_and_paste_in_text_document.py'])
+
+        message_var.set("Text copied and appended!")  # Update message variable
+    except Exception as e:
+        message_var.set("Error: " + str(e))  # Update message variable
+
+def on_key_press(key):
+    global ctrl_pressed
+
+    if key == keyboard.Key.ctrl_l:
+        ctrl_pressed = True
+
+    if key == keyboard.KeyCode.from_char('c'):
+        if ctrl_pressed:
+            copy_selected_text()
+
+def on_key_release(key):
+    global ctrl_pressed
+
+    if key == keyboard.Key.ctrl_l:
+        ctrl_pressed = False
+
+# Create GUI window
+window = tk.Tk()
+window.title("Copy and Paste Text")
+window.geometry("500x400")  # Set the size of the window (width x height)
+window.configure(bg="#002300")  # Set the background color of the window
+
+# Create message variable
+message_var = tk.StringVar()
+message_var.set("Press Ctrl+C to copy and append selected text.")
+
+# Create label
+label = tk.Label(window, textvariable=message_var)
+label.pack()
+
+# Start listener for key presses and releases
+with keyboard.Listener(on_press=on_key_press, on_release=on_key_release) as listener:
+    try:
+        # Start the GUI event loop
+        window.mainloop()
+    except KeyboardInterrupt:
+        # Stop the listener when Ctrl+C is pressed
+        listener.stop()
+With these modifications, when you select the needed text and press Ctrl+C, the cppy_and_paste_in_text_document.py script will be executed, automatically appending the text.
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+The other closing activities can be carried out in the back office in your office
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+please send me the report at the latest the day after the audit
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+/api/copy-and-paste
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+Pallav GOGOI
+21 giu
+
+Modificato
+
+@28
+Visualizzato da 14.595 persone
+#BVTrustMakers | Congratulations to the CIF Global-SSC employees who have reached their long service milestone of 5 years and 10 years in Bureau Veritas. They have been instrumental in shaping CIF Global-SSC and setting new benchmarks for the newer employees. The awardees were further delighted and motivated as they received their awards from Vincent Bourdil, Executive Vice President - Global Business Lines and Performance, and Nathalie Pousin, Senior Vice President - GSL Commodities, who were in India. Thank you!
+
+Mostra traduzione
+Immagine allegata - Nessuna descrizione impostata
+Immagine allegata - Nessuna descrizione impostata
+Immagine allegata - Nessuna descrizione impostata
+Immagine allegata - Nessuna descrizione impostata
++ altri 4
+
+
+
+
+
+
+Remi VILLALONGUE e 53 altri utenti
+
+Visualizzare 2 commenti precedenti
+2 nuovi
+Nuovo, Santosh Kumar PATIL, Congratulations!
+SP
+
+
+
+1
+Santosh Kumar PATIL
+Ieri alle 05:43
+Congratulations!
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+Pallav GOGOI
+21 giu
+
+Modificato
+
+@28
+Visualizzato da 14.595 persone
+#BVTrustMakers | Congratulations to the CIF Global-SSC employees who have reached their long service milestone of 5 years and 10 years in Bureau Veritas. They have been instrumental in shaping CIF Global-SSC and setting new benchmarks for the newer employees. The awardees were further delighted and motivated as they received their awards from Vincent Bourdil, Executive Vice President - Global Business Lines and Performance, and Nathalie Pousin, Senior Vice President - GSL Commodities, who were in India. Thank you!
+
+Mostra traduzione
+Immagine allegata - Nessuna descrizione impostata
+Immagine allegata - Nessuna descrizione impostata
+Immagine allegata - Nessuna descrizione impostata
+Immagine allegata - Nessuna descrizione impostata
++ altri 4
+
+
+
+
+
+
+Remi VILLALONGUE e 53 altri utenti
+
+Visualizzare 2 commenti precedenti
+2 nuovi
+Nuovo, Santosh Kumar PATIL, Congratulations!
+SP
+
+
+
+1
+Santosh Kumar PATIL
+Ieri alle 05:43
+Congratulations!
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+/api/copy-and-paste
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+Fanta was born in Europe, with the brand created by The Coca-Cola Company in Germany during World War II due to difficulties in sourcing the original Coca-Cola syrup. Initially, it was produced using whey and apple cider. The version we know with oranges is entirely Italian: it was invented in 1955 in Naples at the SNIBEG - Società Napoletana Imbottigliamento Bevande Gassate plant.
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+Fanta was born in Europe, with the brand created by The Coca-Cola Company in Germany during World War II due to difficulties in sourcing the original Coca-Cola syrup. Initially, it was produced using whey and apple cider. The version we know with oranges is entirely Italian: it was invented in 1955 in Naples at the SNIBEG - Società Napoletana Imbottigliamento Bevande Gassate plant.
+____________________
+
+________________________________________OOOOOOOOOO----------------------------------------
+/api/copy-and-paste'
+____________________

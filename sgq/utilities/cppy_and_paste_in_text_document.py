@@ -1,3 +1,7 @@
+# il codice creato con l'aiuto di chatgpt recupera il testo selezionato e lo copia ed incolla
+# direttamente nella directory definita
+# alla data del 25 giugno 2023 non si riesce a far avviare il programma direttamente dalla 
+# combinazione di tasti
 import subprocess
 import tkinter as tk
 from pynput import keyboard
