@@ -1,4 +1,5 @@
-f you want to concatenate the contents of all files in a directory and its subdirectories, excluding specific directories (__pycache__, migrations, and venv), and store the result in a text file using the tree command in Ubuntu, you can modify the command as follows:
+<span style="color: red;">This is red text</span>
+If you want to concatenate the contents of all files in a directory and its subdirectories, excluding specific directories (__pycache__, migrations, and venv), and store the result in a text file using the tree command in Ubuntu, you can modify the command as follows:
 
 bash
 Copy code
