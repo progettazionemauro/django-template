@@ -7,6 +7,9 @@ from .views import (home_page,
 )
 from .views import create_schema_certificativo, update_schema_certificativo, delete_schema_certificativo
 
+
+app_name = 'sgq'  # Add this line to set the app namespace
+
 urlpatterns = [
     path('', home_page, name='home_page'),
     path('schema_certificativo/', SchemaCertificativoListView.as_view(), name='schema_certificativo_list'),

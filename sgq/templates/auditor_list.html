@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h2>Elenco Auditor</h2>
 <ul>
   {% for auditor in object_list %}
@@ -11,3 +14,5 @@
     <li>Non ho trovato auditors.</li>
   {% endfor %}
 </ul>
+
+{% endblock %}
