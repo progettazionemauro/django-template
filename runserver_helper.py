@@ -5,7 +5,8 @@ import sys
 def get_available_port():
     # Create a socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(('localhost', 0))  # Bind to any available port
+    sock.bind(('', 0))  # Bind to any available port
+    sock.listen(1)      # Listen for connections
     _, port = sock.getsockname()
     sock.close()
     return port
