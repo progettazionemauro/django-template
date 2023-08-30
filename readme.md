@@ -73,3 +73,77 @@ else
   echo "There are conflicts after pulling. Please resolve the conflicts manually and commit the changes."
 fi
 By adding --force to the git pull command, you're instructing Git to overwrite any local changes on the DigitalOcean Droplet with the changes from the remote branch. Keep in mind that using --force can potentially cause data loss if you have important uncommitted changes on the Droplet that you want to keep. Use it with caution.
+
+#!/bin/bash
+
+# Get the commit message as input
+read -p "Enter the commit message: " commit_message
+
+# Get the current branch name and assign it to the central_branch variable
+central_branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Ask the user whether to create a new branch or remain on the current branch
+read -p "Do you want to create a new branch? (y/n): " answer
+
+if [[ $answer == "y" ]]; then
+  # Get the name of the new branch from the user
+  read -p "Enter the name of the new branch: " new_branch
+
+  # Check if the local branch exists, if not, create it from the central branch
+  if ! git show-ref --quiet refs/heads/$new_branch; then
+    git checkout -b $new_branch $central_branch
+  else
+    git checkout $new_branch
+  fi
+
+  # Get the commit message for the new changes
+  read -p "Enter the commit message for the new changes: " new_commit_message
+
+  # Commit the changes on the new branch
+  git add .
+  git commit -m "$new_commit_message"
+
+  # Push changes to the new local branch
+  echo "Pushing changes to $new_branch"
+  git push origin $new_branch
+
+  # Switch to the new branch on the DigitalOcean droplet
+  echo "Switching to the new branch on the DigitalOcean droplet..."
+  ssh root@146.190.169.21 "cd /home/mauro/django-project/django-template && git checkout $new_branch"
+else
+  # Commit the changes on the current branch
+  git add .
+  git commit -m "$commit_message"
+
+  # Push changes to the current branch
+  echo "Pushing changes to the current branch"
+  git push origin $(git rev-parse --abbrev-ref HEAD)
+
+  # Switch to the branch on the DigitalOcean droplet
+  echo "Switching to the current branch on the DigitalOcean droplet..."
+  ssh root@146.190.169.21 "cd /home/mauro/django-project/django-template && git checkout $(git rev-parse --abbrev-ref HEAD)"
+fi
+
+# Pull changes from the remote central branch on GitHub
+echo "Pulling changes from origin/$central_branch"
+git pull --force origin $central_branch
+
+# Check if there are any conflicts after pulling
+if [ $? -eq 0 ]; then
+  # No conflicts, proceed with the push
+  # Push changes to the GitHub repository
+  echo "Pushing changes to origin/$central_branch"
+  git push origin $central_branch
+
+  # Log in to the DigitalOcean droplet and pull the changes
+  echo "Logging in to the DigitalOcean droplet..."
+  ssh root@146.190.169.21 "cd /home/mauro/django-project/django-template && git pull"
+
+  echo "Changes successfully pushed to both GitHub and the DigitalOcean droplet."
+else
+  # Conflicts exist, prompt the user to resolve them manually
+  echo "There are conflicts after pulling. Please resolve the conflicts manually and commit the changes."
+fi
+ 
+
+ Cambiato 
