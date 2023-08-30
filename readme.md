@@ -147,3 +147,5 @@ fi
  
 
  Cambiato 
+
+ Prova dopo stash and pull su droplet
