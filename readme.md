@@ -46,3 +46,30 @@ shell
 Copy code
 git push --force origin main
 By using --force, Git will overwrite the remote main branch with your local branch, disregarding any conflicting changes. However, please exercise caution when using --force, as it can result in data loss if not used carefully. Make sure you have a backup or confirmation that overwriting the remote branch is the intended action.
+
+Errore - Cambiamento:
+It sounds like you want to modify the script to force overwrite any local changes on the DigitalOcean Droplet when pulling from the remote branch. To achieve this, you can add the --force option to the git pull command. Here's the modified part of the script:
+
+bash
+Copy code
+# Pull changes from the remote central branch on GitHub
+echo "Pulling changes from origin/$central_branch"
+git pull --force origin $central_branch
+
+# Check if there are any conflicts after pulling
+if [ $? -eq 0 ]; then
+  # No conflicts, proceed with the push
+  # Push changes to the GitHub repository
+  echo "Pushing changes to origin/$central_branch"
+  git push origin $central_branch
+
+  # Log in to the DigitalOcean droplet and pull the changes
+  echo "Logging in to the DigitalOcean droplet..."
+  ssh root@146.190.169.21 "cd /home/mauro/django-project/django-template && git pull"
+
+  echo "Changes successfully pushed to both GitHub and the DigitalOcean droplet."
+else
+  # Conflicts exist, prompt the user to resolve them manually
+  echo "There are conflicts after pulling. Please resolve the conflicts manually and commit the changes."
+fi
+By adding --force to the git pull command, you're instructing Git to overwrite any local changes on the DigitalOcean Droplet with the changes from the remote branch. Keep in mind that using --force can potentially cause data loss if you have important uncommitted changes on the Droplet that you want to keep. Use it with caution.
