@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-2-yc!0z!mcv#w$3vk6#s5i635l+bg#x3+24w2!26ikg4o-dj4u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '146.190.169.21'] # tiene conto delle attività su droplet
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '146.190.169.21'] # tiene conto delle attività su droplet
+ALLOWED_HOSTS = ['app.sgbh.org', 'www.sgbh.org', '127.0.0.1', 'localhost', '146.190.169.21']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -69,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'general_template1.wsgi.application'
+WSGI_SERVER_PORT = 443
 
 
 # Database
