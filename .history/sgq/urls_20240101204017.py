@@ -18,6 +18,6 @@ urlpatterns = [
     path('schema_certificativo/create/', create_schema_certificativo, name='create_schema_certificativo'),
     path('schema_certificativo/update/<int:pk>/', update_schema_certificativo, name='update_schema_certificativo'),
     path('schema_certificativo/delete/<int:pk>/', delete_schema_certificativo, name='delete_schema_certificativo'),
-    
+    path('wagtail/', include('wiki-wag.ur')), # nuovo inserimento
     
 ]

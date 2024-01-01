@@ -7,6 +7,6 @@ urlpatterns = [
     path('', include('sgq.urls')),  # Include the app-level URLs
     path('admin/', admin.site.urls),
     # path('wagtail/', include('wagtail.core.urls')), # nuovo inserimento
-    path('wagtail/', include(wagtail_urls)), # nuovo inserimento
+    path('wagtail/', include(wagtail_urls')), # nuovo inserimento
    
 ]
