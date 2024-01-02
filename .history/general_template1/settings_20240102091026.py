@@ -35,18 +35,19 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 INSTALLED_APPS = [
     
     'wagtail.contrib.forms',
-    'wagtail.contrib.redirects',
-    'wagtail.embeds',
-    'wagtail.sites',
-    'wagtail.users',
-    'wagtail.snippets',
-    'wagtail.documents',
-    'wagtail.images',
-    'wagtail.search',
-    'wagtail.admin',
-    
-    'taggit',
-    'modelcluster',
+  'wagtail.contrib.redirects',
+  'wagtail.embeds',
+  'wagtail.sites',
+  'wagtail.users',
+  'wagtail.snippets',
+  'wagtail.documents',
+  'wagtail.images',
+  'wagtail.search',
+  'wagtail.admin',
+  'wagtail',
+
+  'taggit',
+  'modelcluster',
   
     'django.contrib.admin',
     'django.contrib.auth',
