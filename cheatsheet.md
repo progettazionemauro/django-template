@@ -1225,6 +1225,262 @@ This uses the |list filter to convert the generator to a list before accessing t
 
 ## HOW TO FEED A TABLE FROM DJANGO ADMIN PANEL, OPEN IN AS BLOCK INTO WAGTAIL ADMIN PANEL AND RENDER IT INTO THE WAGTAIL FRONTEND 
 
+To achieve your goal, you'll need to follow a series of steps. I'll provide you with a step-by-step guide to make the necessary changes and additions to your Django admin, Wagtail models, and HTML template.
+
+- **Step 1: Add a Fixed Table Block to Your Models **and Update BlogPage Model **
+  In your **blog/models.py**, add the FixedTableBlock to the list of available blocks. This block will represent the fixed table content. Include the FixedTableBlock in the StreamField of your BlogPage model.
+- The key changes here are adding the import for `FixedTableBlock` and including it in the `StreamField` under the name `'fixed_table'`.
+
+```python
+
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.fields import StreamField, RichTextField
+from wagtail.admin.panels import FieldPanel
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.models import Page
+from wagtail import blocks
+from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.contrib.routable_page.models import RoutablePageMixin, path
+from django.db import models
+from wagtail.search import index
+from modelcluster.fields import ParentalKey
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+
+from .blocks import PublicationBlock # rif 1 - Adding in rendering get_absolute_url
+from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
+from wagtail.images.blocks import ImageChooserBlock
+
+class RawHTMLBlock(blocks.RawHTMLBlock):
+    class Meta:
+        icon = "code"  # Set a suitable icon from available Wagtail icons
+        template = 'blog/raw_html_block.html'
+
+class CodeBlock(blocks.StructBlock):
+    code = blocks.TextBlock()
+    class Meta:
+        template = 'blog/code_block.html'
+
+class FixedTableBlock(blocks.StructBlock):
+    fixed_table_text = blocks.CharBlock()
+
+    class Meta:
+        icon = 'table'  # Set an icon for the block
+        template = 'blog/fixed_table_block.html'  # Create this template for rendering the block
+
+class BlogPage(Page):
+    author = models.CharField(max_length=255, default='Default Author')
+    date = models.DateField("Post date")
+    
+    # New field for content choice
+    content_choice = models.CharField(
+        max_length=20,
+        choices=[
+            ('choice_one', 'Choice One'),
+            ('choice_two', 'Choice Two'),
+        ],
+        default='choice_one',  # Set a default choice
+        help_text="Select the content to be displayed on the page."
+    )
+    
+    body = StreamField([
+        ('heading', blocks.CharBlock(form_classname="title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+        ('code', CodeBlock()),
+        ('raw_html', RawHTMLBlock()),
+        ('publication', PublicationBlock()), # rif 1 - Adding in rendering get_absolute_url
+        ('table', TypedTableBlock([
+            ('text', blocks.CharBlock()),
+            ('numeric', blocks.FloatBlock()),
+            ('rich_text', blocks.RichTextBlock()),
+            ('image', ImageChooserBlock()),
+            ('country', blocks.ChoiceBlock(choices=[
+                ('be', 'Belgium'),
+                ('fr', 'France'),
+                ('de', 'Germany'),
+                ('nl', 'Netherlands'),
+                ('pl', 'Poland'),
+                ('uk', 'United Kingdom'),
+            ])),
+        ])),
+        ('fixed_table', FixedTableBlock()),  # Add the FixedTableBlock
+    ], use_json_field=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('author'),
+        FieldPanel('date'),
+        FieldPanel('content_choice'),
+        FieldPanel('body'),
+    ]
+
+```
+[^Removal of special-purpose field panel types]: Removal of special-purpose field panel typesThe panel types `StreamFieldPanel`, `RichTextFieldPanel`, `ImageChooserPanel`, `DocumentChooserPanel` and `SnippetChooserPanel` have been phased out, and can now be replaced with `FieldPanel`. Additionally, `PageChooserPanel` is only required when passing a `page_type` or `can_choose_root`, and can otherwise be replaced with `FieldPanel`. In all cases, `FieldPanel` will now automatically select the most appropriate form element. This feature was developed by Matt Westcott.
+
+Step 2: **Go in the Wagtail manage.py level** and make sure to run migrations after making these changes:
+
+```
+python3 manage.py makemigrations
+python3 manage.py migrate
+```
+
+
+
+Now you can use the Wagtail admin to add and edit the content for the `fixed_table` block in your `BlogPage`. This content should then be rendered in your `blog_page.html` 
+
+> At this stage you go into Wagtail Project via **python3 manage.py runserver ** into admin panel and if all works you can access and add the table. In the wagtail preview mode you receive a visualization error because the **blog/fixed_table_block.html** does not exists!
+
+
+
+Step 3 - Creation of blog/fixed_table_block.html
+
+So before to jump to Django admin level to create an input data entry let's try to enter the data from **FixedTableBlock()**. In this manner sure that all is working fine just until now.   To do this First, update the `FixedTableBlock` in `models.py`:
+
+```python
+pythonCopy codefrom wagtail.core import blocks
+
+class FixedTableBlock(blocks.StructBlock):
+    nation = blocks.CharBlock(required=True, help_text='Enter nation')
+    capital = blocks.CharBlock(required=True, help_text='Enter capital')
+
+    class Meta:
+        template = 'blog/fixed_table_block.html'
+```
+
+Then, create or update the template file at **blog/templates/blog/fixed_table_block.html**:
+
+```html
+htmlCopy code<div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Nation</th>
+                <th>Capital</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ value.nation }}</td>
+                <td>{{ value.capital }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+```
+
+
+
+**Go in the Wagtail manage.py level** and make sure to run migrations after making these changes:
+
+```bash
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py migrate
+```
+
+If all works you are able to input the data and see the table in Wagtail preview mode
+
+> **Always remeber to conslidate you commmit pushing on Github**
+
+
+
+
+
+
+
+--------- FINO A QUI --
+
+template.Step 3: Create Template for FixedTableBlock
+Create a template file at blog/templates/blog/fixed_table_block.html for rendering the FixedTableBlock. This template will be used to display the fixed table content.
+
+html
+Copy code
+<span>{{ value.fixed_table_text }}</span>
+Step 4: Run Migrations
+Run the following commands to apply the model changes:
+
+bash
+Copy code
+python manage.py makemigrations
+python manage.py migrate
+Step 5: Update Django Admin
+Create an admin class for BlogPage in blog/wagtail_hooks.py:
+
+python
+Copy code
+from wagtail.contrib.modeladmin.options import (
+    ModelAdmin, modeladmin_register, ModelAdminGroup
+)
+from .models import BlogPage
+
+class BlogPageAdmin(ModelAdmin):
+    model = BlogPage
+    menu_label = 'Blog Pages'
+    menu_icon = 'doc-full-inverse'
+    menu_order = 200
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    list_display = ('title', 'author', 'date', 'content_choice')
+    search_fields = ('title', 'author', 'date', 'content_choice')
+
+modeladmin_register(BlogPageAdmin)
+Step 6: Include Admin CSS
+In your blog/static/css/admin.css file, add the following CSS to improve the display of the custom block in the admin.
+
+css
+Copy code
+.wagtail-edit-handler-fixed_table .field-content textarea {
+    height: 100px; /* Adjust the height as needed */
+}
+Step 7: Update BlogPage Admin Panels
+Update the content_panels in BlogPage to include the new block:
+
+python
+Copy code
+# ...
+
+class BlogPage(Page):
+    # ...
+
+    content_panels = Page.content_panels + [
+        FieldPanel('author'),
+        FieldPanel('date'),
+        FieldPanel('content_choice'),
+        FieldPanel('body'),
+    ]
+Step 8: Update blog_page.html
+Update blog/templates/blog/blog_page.html to render the new FixedTableBlock.
+
+html
+Copy code
+<!-- ... existing code ... -->
+
+{% for block in page.body %}
+    {% if block.block_type == 'fixed_table' %}
+        {% include_block block %}
+    {% elif block.block_type == 'table' %}
+        <!-- ... existing table code ... -->
+    {% elif block.block_type == 'heading' %}
+        <!-- ... existing heading code ... -->
+    {% elif block.block_type == 'publication' %}
+        <!-- ... existing publication code ... -->
+    {% else %}
+        <!-- ... existing block code ... -->
+    {% endif %}
+{% endfor %}
+
+<!-- ... existing code ... -->
+Step 9: Restart Server
+Restart your development server to see the changes:
+
+bash
+Copy code
+python manage.py runserver
+Now you should be able to add and edit the fixed table content in the Django admin and see it rendered on your blog_page.html. Adjust the styles and templates according to your design preferences.
+
+This guide assumes a basic project structure, so adjust the paths if your project structure is different. Let me know if you have any questions or if there's anything specific you'd like to clarify!
+
+-----------------
+
 ### WAGTAIL Upgrade process ###
 We recommend upgrading one feature release at a time, even if your project is several versions behind the current one. This has a number of advantages over skipping directly to the newest release:
 
