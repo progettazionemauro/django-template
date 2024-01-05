@@ -20,7 +20,3 @@ class AuditorAdmin(admin.ModelAdmin):
     def Link_schema_certificativo(self, obj):
        # return format_html('<a  href="https://127.0.0.1:8000/product/{0}" >{1}</a>',obj.id, obj.email_auditor) #url con parametri
         return format_html('<a  href="https://en.wikipedia.org/wiki/Nigeria" >{1}</a>',obj.id, obj.email_auditor)
-    
-    @admin.register(FixedTableContent)
-    class FixedTableContentAdmin(admin.ModelAdmin):
-        list_display = ('nation', 'capital')

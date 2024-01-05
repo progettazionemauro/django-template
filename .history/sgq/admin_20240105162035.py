@@ -23,4 +23,4 @@ class AuditorAdmin(admin.ModelAdmin):
     
     @admin.register(FixedTableContent)
     class FixedTableContentAdmin(admin.ModelAdmin):
-        list_display = ('nation', 'capital')
+    list_display = ('nation', 'capital')

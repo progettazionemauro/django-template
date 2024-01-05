@@ -22,5 +22,4 @@ class AuditorAdmin(admin.ModelAdmin):
         return format_html('<a  href="https://en.wikipedia.org/wiki/Nigeria" >{1}</a>',obj.id, obj.email_auditor)
     
     @admin.register(FixedTableContent)
-    class FixedTableContentAdmin(admin.ModelAdmin):
-        list_display = ('nation', 'capital')
+    class FixedTableContentAdmin(admin.ModelAdmin):    list_display = ('nation', 'capital')

@@ -41,10 +41,3 @@ class Auditor(models.Model): #registration
     def __str__(self):
         return f"{self.nome_auditor}"
     
-# the model to pass to wagtail 
-class FixedTableContent(models.Model):
-    nation = models.CharField(max_length=255)
-    capital = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nation
